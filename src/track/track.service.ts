@@ -3,10 +3,17 @@ import { TrackRepositoryService } from './track.repository.service';
 import { TrackEntity } from './track.entity';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
+import { FavoriteTypeEnum } from '../favorite/favorite-type.enum';
+import {
+  FavoriteRepositoryService
+} from '../favorite/favorite.repository.service';
 
 @Injectable()
 export class TrackService {
-  constructor(private readonly trackRepositoryService: TrackRepositoryService) {}
+  constructor(
+    private readonly trackRepositoryService: TrackRepositoryService,
+    private readonly favoriteRepositoryService: FavoriteRepositoryService,
+  ) {}
 
   async findMany(): Promise<TrackEntity[]> {
     return this.trackRepositoryService.getMany();
@@ -71,6 +78,12 @@ export class TrackService {
     const track = await this.getOneOrFail(id);
 
     await this.trackRepositoryService.delete(track.id);
+
+    const relatedFavorite = await this.favoriteRepositoryService.getOneByUnitIdAndType(track.id, FavoriteTypeEnum.TRACKS);
+
+    if (relatedFavorite !== undefined) {
+      await this.favoriteRepositoryService.delete(relatedFavorite.id);
+    }
 
     return track;
   }

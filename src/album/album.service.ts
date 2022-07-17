@@ -5,12 +5,17 @@ import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { TrackEntity } from '../track/track.entity';
 import { TrackRepositoryService } from '../track/track.repository.service';
+import { FavoriteTypeEnum } from '../favorite/favorite-type.enum';
+import {
+  FavoriteRepositoryService
+} from '../favorite/favorite.repository.service';
 
 @Injectable()
 export class AlbumService {
   constructor(
     private readonly albumRepositoryService: AlbumRepositoryService,
     private readonly trackRepositoryService: TrackRepositoryService,
+    private readonly favoriteRepositoryService: FavoriteRepositoryService,
   ) {}
 
   async findMany(): Promise<AlbumEntity[]> {
@@ -76,6 +81,16 @@ export class AlbumService {
     relatedTracks.forEach((track: TrackEntity): void => {
       track.setAlbumId(null);
     })
+
+    const relatedFavorite =
+      await this.favoriteRepositoryService.getOneByUnitIdAndType(
+        album.id,
+        FavoriteTypeEnum.ALBUMS,
+      );
+
+    if (relatedFavorite !== undefined) {
+      await this.favoriteRepositoryService.delete(relatedFavorite.id);
+    }
 
     return album;
   }
