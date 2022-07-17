@@ -4,9 +4,7 @@ import { TrackEntity } from './track.entity';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { FavoriteTypeEnum } from '../favorite/favorite-type.enum';
-import {
-  FavoriteRepositoryService
-} from '../favorite/favorite.repository.service';
+import { FavoriteRepositoryService } from '../favorite/favorite.repository.service';
 
 @Injectable()
 export class TrackService {
@@ -30,14 +28,15 @@ export class TrackService {
   }
 
   async getOne(id: string): Promise<TrackEntity | undefined> {
-    return  this.trackRepositoryService.getOne(id);
+    return this.trackRepositoryService.getOne(id);
   }
 
   async create(dto: CreateTrackDto): Promise<TrackEntity> {
-    if (dto.name === undefined
-      || dto.duration === undefined
-      || dto.artistId === undefined
-      || dto.albumId === undefined
+    if (
+      dto.name === undefined ||
+      dto.duration === undefined ||
+      dto.artistId === undefined ||
+      dto.albumId === undefined
     ) {
       throw new HttpException('Parameter is required', HttpStatus.BAD_REQUEST);
     }
@@ -79,7 +78,11 @@ export class TrackService {
 
     await this.trackRepositoryService.delete(track.id);
 
-    const relatedFavorite = await this.favoriteRepositoryService.getOneByUnitIdAndType(track.id, FavoriteTypeEnum.TRACKS);
+    const relatedFavorite =
+      await this.favoriteRepositoryService.getOneByUnitIdAndType(
+        track.id,
+        FavoriteTypeEnum.TRACKS,
+      );
 
     if (relatedFavorite !== undefined) {
       await this.favoriteRepositoryService.delete(relatedFavorite.id);

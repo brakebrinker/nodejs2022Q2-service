@@ -10,23 +10,23 @@ export const users = [
     login: 'mark',
     password: 'test1234',
     version: 1,
-  })
-]
+  }),
+];
 
 export const artists = [
   new ArtistEntity({
     name: 'Fernando',
     grammy: true,
-  })
-]
+  }),
+];
 
 export const albums = [
   new AlbumEntity({
     name: 'Passion',
     year: 2022,
-    artistId: artists[0].id
-  })
-]
+    artistId: artists[0].id,
+  }),
+];
 
 export const tracks = [
   new TrackEntity({
@@ -34,8 +34,8 @@ export const tracks = [
     duration: 15,
     artistId: artists[0].id,
     albumId: albums[0].id,
-  })
-]
+  }),
+];
 
 export const favorites = [
   new FavoriteEntity({
@@ -49,5 +49,5 @@ export const favorites = [
   new FavoriteEntity({
     type: FavoriteTypeEnum.TRACKS,
     unitId: tracks[0].id,
-  })
-]
+  }),
+];

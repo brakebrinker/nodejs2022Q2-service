@@ -16,12 +16,7 @@ export class AlbumModel {
 
   readonly artistId: string | null;
 
-  private constructor({
-    id,
-    name,
-    year,
-    artistId,
-  }: CreateArgs) {
+  private constructor({ id, name, year, artistId }: CreateArgs) {
     this.id = id;
     this.name = name;
     this.year = year;
@@ -34,6 +29,6 @@ export class AlbumModel {
       name: entity.getName(),
       year: entity.getYear(),
       artistId: entity.getArtistId(),
-    })
+    });
   }
 }

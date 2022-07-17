@@ -10,7 +10,7 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import { TrackService } from './track.service';
 import { TrackModel } from './track.model';
@@ -29,12 +29,14 @@ export class TrackController {
 
     return tracks.map((track: TrackEntity): TrackModel => {
       return TrackModel.createNewFromEntity(track);
-    })
+    });
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
-  async getTrack(@Param('id', new ParseUUIDPipe()) trackId: string): Promise<TrackModel> {
+  async getTrack(
+    @Param('id', new ParseUUIDPipe()) trackId: string,
+  ): Promise<TrackModel> {
     const track = await this.trackService.getOneOrFail(trackId);
 
     return TrackModel.createNewFromEntity(track);
@@ -62,7 +64,9 @@ export class TrackController {
   @UseInterceptors(ClassSerializerInterceptor)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  async delete(@Param('id', new ParseUUIDPipe()) trackId: string): Promise<void> {
+  async delete(
+    @Param('id', new ParseUUIDPipe()) trackId: string,
+  ): Promise<void> {
     await this.trackService.delete(trackId);
   }
 }

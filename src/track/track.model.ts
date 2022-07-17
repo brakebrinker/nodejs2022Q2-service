@@ -19,13 +19,7 @@ export class TrackModel {
 
   readonly albumId: string | null;
 
-  private constructor({
-    id,
-    name,
-    duration,
-    artistId,
-    albumId,
-  }: CreateArgs) {
+  private constructor({ id, name, duration, artistId, albumId }: CreateArgs) {
     this.id = id;
     this.name = name;
     this.duration = duration;
@@ -40,6 +34,6 @@ export class TrackModel {
       duration: entity.getDuration(),
       artistId: entity.getArtistId(),
       albumId: entity.getAlbumId(),
-    })
+    });
   }
 }

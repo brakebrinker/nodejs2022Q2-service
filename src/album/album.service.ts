@@ -6,9 +6,7 @@ import { UpdateAlbumDto } from './dto/update-album.dto';
 import { TrackEntity } from '../track/track.entity';
 import { TrackRepositoryService } from '../track/track.repository.service';
 import { FavoriteTypeEnum } from '../favorite/favorite-type.enum';
-import {
-  FavoriteRepositoryService
-} from '../favorite/favorite.repository.service';
+import { FavoriteRepositoryService } from '../favorite/favorite.repository.service';
 
 @Injectable()
 export class AlbumService {
@@ -37,9 +35,10 @@ export class AlbumService {
   }
 
   async create(dto: CreateAlbumDto): Promise<AlbumEntity> {
-    if (dto.name === undefined
-      || dto.year === undefined
-      || dto.artistId === undefined
+    if (
+      dto.name === undefined ||
+      dto.year === undefined ||
+      dto.artistId === undefined
     ) {
       throw new HttpException('Parameter is required', HttpStatus.BAD_REQUEST);
     }
@@ -76,11 +75,13 @@ export class AlbumService {
 
     await this.albumRepositoryService.delete(album.id);
 
-    const relatedTracks = await this.trackRepositoryService.getManyByAlbumId(album.id);
+    const relatedTracks = await this.trackRepositoryService.getManyByAlbumId(
+      album.id,
+    );
 
     relatedTracks.forEach((track: TrackEntity): void => {
       track.setAlbumId(null);
-    })
+    });
 
     const relatedFavorite =
       await this.favoriteRepositoryService.getOneByUnitIdAndType(

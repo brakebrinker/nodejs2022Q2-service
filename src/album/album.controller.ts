@@ -10,7 +10,7 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { AlbumModel } from './album.model';
@@ -29,12 +29,14 @@ export class AlbumController {
 
     return albums.map((album: AlbumEntity): AlbumModel => {
       return AlbumModel.createNewFromEntity(album);
-    })
+    });
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
-  async getAlbum(@Param('id', new ParseUUIDPipe()) albumId: string): Promise<AlbumModel> {
+  async getAlbum(
+    @Param('id', new ParseUUIDPipe()) albumId: string,
+  ): Promise<AlbumModel> {
     const album = await this.albumService.getOneOrFail(albumId);
 
     return AlbumModel.createNewFromEntity(album);
@@ -62,7 +64,9 @@ export class AlbumController {
   @UseInterceptors(ClassSerializerInterceptor)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  async delete(@Param('id', new ParseUUIDPipe()) albumId: string): Promise<void> {
+  async delete(
+    @Param('id', new ParseUUIDPipe()) albumId: string,
+  ): Promise<void> {
     await this.albumService.delete(albumId);
   }
 }

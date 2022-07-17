@@ -7,7 +7,7 @@ type CreateArgs = {
   readonly id?: string;
   readonly createdAt?: number;
   readonly updatedAt?: number;
-}
+};
 
 export class UserEntity {
   readonly id: string;
@@ -23,12 +23,7 @@ export class UserEntity {
   private updatedAt: number;
 
   constructor(args: CreateArgs) {
-    const {
-      login,
-      password,
-      version,
-      createdAt = new Date(),
-    } = args;
+    const { login, password, version, createdAt = new Date() } = args;
 
     this.login = login;
     this.password = password;

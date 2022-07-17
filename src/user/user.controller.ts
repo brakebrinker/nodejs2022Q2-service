@@ -10,7 +10,7 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserModel } from './user.model';
 import { UserService } from './user.service';
@@ -29,12 +29,14 @@ export class UserController {
 
     return users.map((user: UserEntity): UserModel => {
       return UserModel.createNewFromEntity(user);
-    })
+    });
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
-  async getUser(@Param('id', new ParseUUIDPipe()) userId: string): Promise<UserModel> {
+  async getUser(
+    @Param('id', new ParseUUIDPipe()) userId: string,
+  ): Promise<UserModel> {
     const user = await this.userService.getOneOrFail(userId);
 
     return UserModel.createNewFromEntity(user);
@@ -60,7 +62,9 @@ export class UserController {
   @UseInterceptors(ClassSerializerInterceptor)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  async delete(@Param('id', new ParseUUIDPipe()) userId: string): Promise<void> {
+  async delete(
+    @Param('id', new ParseUUIDPipe()) userId: string,
+  ): Promise<void> {
     await this.userService.delete(userId);
   }
 }

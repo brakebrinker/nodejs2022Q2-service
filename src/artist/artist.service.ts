@@ -7,9 +7,7 @@ import { AlbumRepositoryService } from '../album/album.repository.service';
 import { AlbumEntity } from '../album/album.entity';
 import { TrackRepositoryService } from '../track/track.repository.service';
 import { TrackEntity } from '../track/track.entity';
-import {
-  FavoriteRepositoryService
-} from '../favorite/favorite.repository.service';
+import { FavoriteRepositoryService } from '../favorite/favorite.repository.service';
 import { FavoriteTypeEnum } from '../favorite/favorite-type.enum';
 
 @Injectable()
@@ -71,17 +69,21 @@ export class ArtistService {
 
     await this.artistRepositoryService.delete(artist.id);
 
-    const relatedAlbums = await this.albumRepositoryService.getManyByArtistId(artist.id);
+    const relatedAlbums = await this.albumRepositoryService.getManyByArtistId(
+      artist.id,
+    );
 
     relatedAlbums.forEach((album: AlbumEntity): void => {
       album.setArtistId(null);
-    })
+    });
 
-    const relatedTracks = await this.trackRepositoryService.getManyByArtistId(artist.id);
+    const relatedTracks = await this.trackRepositoryService.getManyByArtistId(
+      artist.id,
+    );
 
     relatedTracks.forEach((track: TrackEntity): void => {
       track.setArtistId(null);
-    })
+    });
 
     const relatedFavorite =
       await this.favoriteRepositoryService.getOneByUnitIdAndType(

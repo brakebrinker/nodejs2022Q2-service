@@ -48,6 +48,6 @@ export class UserModel {
       version: entity.getVersion(),
       createdAt: entity.getCreatedAt(),
       updatedAt: entity.getUpdatedAt(),
-    })
+    });
   }
 }

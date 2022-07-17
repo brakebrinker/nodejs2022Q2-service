@@ -9,11 +9,15 @@ export class TrackRepositoryService {
   }
 
   async getManyByArtistId(artistId: string): Promise<TrackEntity[]> {
-    return tracks.filter((track: TrackEntity): boolean => track.getArtistId() === artistId);
+    return tracks.filter(
+      (track: TrackEntity): boolean => track.getArtistId() === artistId,
+    );
   }
 
   async getManyByAlbumId(albumId: string): Promise<TrackEntity[]> {
-    return tracks.filter((track: TrackEntity): boolean => track.getAlbumId() === albumId);
+    return tracks.filter(
+      (track: TrackEntity): boolean => track.getAlbumId() === albumId,
+    );
   }
 
   async getOne(id: string): Promise<TrackEntity | undefined> {

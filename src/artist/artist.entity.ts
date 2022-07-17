@@ -4,7 +4,7 @@ type CreateArgs = {
   readonly name: string;
   readonly grammy: boolean;
   readonly id?: string;
-}
+};
 
 export class ArtistEntity {
   readonly id: string;
@@ -14,10 +14,7 @@ export class ArtistEntity {
   private grammy: boolean;
 
   constructor(args: CreateArgs) {
-    const {
-      name,
-      grammy,
-    } = args;
+    const { name, grammy } = args;
 
     this.name = name;
     this.grammy = grammy;

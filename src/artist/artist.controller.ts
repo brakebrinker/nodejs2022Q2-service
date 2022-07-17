@@ -10,7 +10,7 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import { ArtistService } from './artist.service';
 import { ArtistModel } from './artist.model';
@@ -29,12 +29,14 @@ export class ArtistController {
 
     return artists.map((artist: ArtistEntity): ArtistModel => {
       return ArtistModel.createNewFromEntity(artist);
-    })
+    });
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
-  async getArtist(@Param('id', new ParseUUIDPipe()) artistId: string): Promise<ArtistModel> {
+  async getArtist(
+    @Param('id', new ParseUUIDPipe()) artistId: string,
+  ): Promise<ArtistModel> {
     const artist = await this.artistService.getOneOrFail(artistId);
 
     return ArtistModel.createNewFromEntity(artist);
@@ -62,7 +64,9 @@ export class ArtistController {
   @UseInterceptors(ClassSerializerInterceptor)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  async delete(@Param('id', new ParseUUIDPipe()) artistId: string): Promise<void> {
+  async delete(
+    @Param('id', new ParseUUIDPipe()) artistId: string,
+  ): Promise<void> {
     await this.artistService.delete(artistId);
   }
 }

@@ -9,7 +9,9 @@ export class AlbumRepositoryService {
   }
 
   async getManyByArtistId(artistId: string): Promise<AlbumEntity[]> {
-    return albums.filter((album: AlbumEntity): boolean => album.getArtistId() === artistId);
+    return albums.filter(
+      (album: AlbumEntity): boolean => album.getArtistId() === artistId,
+    );
   }
 
   async getOne(id: string): Promise<AlbumEntity | undefined> {

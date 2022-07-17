@@ -6,7 +6,7 @@ type CreateArgs = {
   readonly artistId: string | null;
   readonly albumId: string | null;
   readonly id?: string;
-}
+};
 
 export class TrackEntity {
   readonly id: string;
@@ -20,12 +20,7 @@ export class TrackEntity {
   private albumId: string | null;
 
   constructor(args: CreateArgs) {
-    const {
-      name,
-      duration,
-      artistId,
-      albumId,
-    } = args;
+    const { name, duration, artistId, albumId } = args;
 
     this.name = name;
     this.duration = duration;

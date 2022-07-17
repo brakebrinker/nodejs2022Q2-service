@@ -13,11 +13,7 @@ export class ArtistModel {
 
   readonly grammy: boolean;
 
-  private constructor({
-    id,
-    name,
-    grammy,
-  }: CreateArgs) {
+  private constructor({ id, name, grammy }: CreateArgs) {
     this.id = id;
     this.name = name;
     this.grammy = grammy;
@@ -28,6 +24,6 @@ export class ArtistModel {
       id: entity.id,
       name: entity.getName(),
       grammy: entity.hasGrammy(),
-    })
+    });
   }
 }

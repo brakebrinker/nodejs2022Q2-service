@@ -12,7 +12,7 @@ export type FavoritesResult = {
   readonly artists: ArtistEntity[];
   readonly albums: AlbumEntity[];
   readonly tracks: TrackEntity[];
-}
+};
 
 @Injectable()
 export class FavoriteService {
@@ -23,24 +23,30 @@ export class FavoriteService {
     private readonly trackService: TrackService,
   ) {}
   async findMany(): Promise<FavoritesResult> {
-    const favoriteArtists = await this.favoriteRepositoryService.getManyByType(FavoriteTypeEnum.ARTISTS);
-    const favoriteAlbums = await this.favoriteRepositoryService.getManyByType(FavoriteTypeEnum.ALBUMS);
-    const favoriteTracks = await this.favoriteRepositoryService.getManyByType(FavoriteTypeEnum.TRACKS);
+    const favoriteArtists = await this.favoriteRepositoryService.getManyByType(
+      FavoriteTypeEnum.ARTISTS,
+    );
+    const favoriteAlbums = await this.favoriteRepositoryService.getManyByType(
+      FavoriteTypeEnum.ALBUMS,
+    );
+    const favoriteTracks = await this.favoriteRepositoryService.getManyByType(
+      FavoriteTypeEnum.TRACKS,
+    );
 
-    const artists = await Promise.all(favoriteArtists.map(
-        async (favoriteArtist): Promise<ArtistEntity> => {
+    const artists = await Promise.all(
+      favoriteArtists.map(async (favoriteArtist): Promise<ArtistEntity> => {
         return this.artistService.getOneOrFail(favoriteArtist.unitId);
       }),
     );
 
-    const albums = await Promise.all(favoriteAlbums.map(
-        async (favoriteAlbum): Promise<AlbumEntity> => {
+    const albums = await Promise.all(
+      favoriteAlbums.map(async (favoriteAlbum): Promise<AlbumEntity> => {
         return this.albumService.getOneOrFail(favoriteAlbum.unitId);
       }),
     );
 
-    const tracks = await Promise.all(favoriteTracks.map(
-        async (favoriteTrack): Promise<TrackEntity> => {
+    const tracks = await Promise.all(
+      favoriteTracks.map(async (favoriteTrack): Promise<TrackEntity> => {
         return this.trackService.getOneOrFail(favoriteTrack.unitId);
       }),
     );
@@ -56,7 +62,10 @@ export class FavoriteService {
     const artist = await this.artistService.getOne(id);
 
     if (artist === undefined) {
-      throw new HttpException(`Artist with id=${id} does not exist`, HttpStatus.UNPROCESSABLE_ENTITY);
+      throw new HttpException(
+        `Artist with id=${id} does not exist`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
 
     await this.favoriteRepositoryService.save(id, FavoriteTypeEnum.ARTISTS);
@@ -68,7 +77,10 @@ export class FavoriteService {
     const album = await this.albumService.getOne(id);
 
     if (album === undefined) {
-      throw new HttpException(`Album with id=${id} does not exist`, HttpStatus.UNPROCESSABLE_ENTITY);
+      throw new HttpException(
+        `Album with id=${id} does not exist`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
 
     await this.favoriteRepositoryService.save(id, FavoriteTypeEnum.ALBUMS);
@@ -80,7 +92,10 @@ export class FavoriteService {
     const track = await this.trackService.getOne(id);
 
     if (track === undefined) {
-      throw new HttpException(`Track with id=${id} does not exist`, HttpStatus.UNPROCESSABLE_ENTITY);
+      throw new HttpException(
+        `Track with id=${id} does not exist`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
 
     await this.favoriteRepositoryService.save(id, FavoriteTypeEnum.TRACKS);
@@ -96,7 +111,10 @@ export class FavoriteService {
       );
 
     if (favoriteArtist === undefined) {
-      throw new HttpException(`Artist with id=${id} does not in favorites`, HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        `Artist with id=${id} does not in favorites`,
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     await this.favoriteRepositoryService.delete(favoriteArtist.id);
@@ -110,7 +128,10 @@ export class FavoriteService {
       );
 
     if (favoriteAlbum === undefined) {
-      throw new HttpException(`Album with id=${id} does not in favorites`, HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        `Album with id=${id} does not in favorites`,
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     await this.favoriteRepositoryService.delete(favoriteAlbum.id);
@@ -124,7 +145,10 @@ export class FavoriteService {
       );
 
     if (favoriteTrack === undefined) {
-      throw new HttpException(`Track with id=${id} does not in favorites`, HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        `Track with id=${id} does not in favorites`,
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     await this.favoriteRepositoryService.delete(favoriteTrack.id);

@@ -19,33 +19,37 @@ export class FavoritesResultModel {
 
   readonly tracks: TrackModel[];
 
-  private constructor({
-    artists,
-    albums,
-    tracks,
-  }: CreateArgs) {
+  private constructor({ artists, albums, tracks }: CreateArgs) {
     this.artists = artists;
     this.albums = albums;
     this.tracks = tracks;
   }
 
-  static createNewFromFavoritesResult(favoritesResult: FavoritesResult): FavoritesResultModel {
-    const artists = favoritesResult.artists.map((artist: ArtistEntity): ArtistModel => {
-      return ArtistModel.createNewFromEntity(artist);
-    });
+  static createNewFromFavoritesResult(
+    favoritesResult: FavoritesResult,
+  ): FavoritesResultModel {
+    const artists = favoritesResult.artists.map(
+      (artist: ArtistEntity): ArtistModel => {
+        return ArtistModel.createNewFromEntity(artist);
+      },
+    );
 
-    const albums = favoritesResult.albums.map((album: AlbumEntity): AlbumModel => {
-      return AlbumModel.createNewFromEntity(album);
-    });
+    const albums = favoritesResult.albums.map(
+      (album: AlbumEntity): AlbumModel => {
+        return AlbumModel.createNewFromEntity(album);
+      },
+    );
 
-    const tracks = favoritesResult.tracks.map((track: TrackEntity): TrackModel => {
-      return TrackModel.createNewFromEntity(track);
-    });
+    const tracks = favoritesResult.tracks.map(
+      (track: TrackEntity): TrackModel => {
+        return TrackModel.createNewFromEntity(track);
+      },
+    );
 
     return new this({
       artists,
       albums,
       tracks,
-    })
+    });
   }
 }

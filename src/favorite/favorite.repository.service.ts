@@ -6,13 +6,18 @@ import { FavoriteEntity } from './favorite.entity';
 @Injectable()
 export class FavoriteRepositoryService {
   async getManyByType(type: FavoriteTypeEnum): Promise<FavoriteEntity[]> {
-    return favorites.filter((favorite: FavoriteEntity): boolean => favorite.type === type);
+    return favorites.filter(
+      (favorite: FavoriteEntity): boolean => favorite.type === type,
+    );
   }
 
-  async getOneByUnitIdAndType(unitId: string, type: FavoriteTypeEnum): Promise<FavoriteEntity | undefined> {
+  async getOneByUnitIdAndType(
+    unitId: string,
+    type: FavoriteTypeEnum,
+  ): Promise<FavoriteEntity | undefined> {
     return favorites.find(
       (favorite: FavoriteEntity): boolean =>
-        favorite.unitId === unitId && favorite.type === type
+        favorite.unitId === unitId && favorite.type === type,
     );
   }
 

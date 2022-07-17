@@ -5,7 +5,7 @@ type CreateArgs = {
   readonly year: number;
   readonly artistId: string | null;
   readonly id?: string;
-}
+};
 
 export class AlbumEntity {
   readonly id: string;
@@ -17,11 +17,7 @@ export class AlbumEntity {
   private artistId: string | null;
 
   constructor(args: CreateArgs) {
-    const {
-      name,
-      year,
-      artistId,
-    } = args;
+    const { name, year, artistId } = args;
 
     this.name = name;
     this.year = year;
