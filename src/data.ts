@@ -2,6 +2,8 @@ import { UserEntity } from './user/user.entity';
 import { ArtistEntity } from './artist/artist.entity';
 import { AlbumEntity } from './album/album.entity';
 import { TrackEntity } from './track/track.entity';
+import { FavoriteTypeEnum } from './favorite/favorite-type.enum';
+import { FavoriteEntity } from './favorite/favorite.entity';
 
 export const users = [
   new UserEntity({
@@ -35,3 +37,17 @@ export const tracks = [
   })
 ]
 
+export const favorites = [
+  new FavoriteEntity({
+    type: FavoriteTypeEnum.ARTISTS,
+    unitId: artists[0].id,
+  }),
+  new FavoriteEntity({
+    type: FavoriteTypeEnum.ALBUMS,
+    unitId: albums[0].id,
+  }),
+  new FavoriteEntity({
+    type: FavoriteTypeEnum.TRACKS,
+    unitId: tracks[0].id,
+  })
+]

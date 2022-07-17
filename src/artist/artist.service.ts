@@ -31,6 +31,10 @@ export class ArtistService {
     return artist;
   }
 
+  async getOne(id: string): Promise<ArtistEntity | undefined> {
+    return this.artistRepositoryService.getOne(id);
+  }
+
   async create(dto: CreateArtistDto): Promise<ArtistEntity> {
     if (dto.name === undefined || dto.grammy === undefined) {
       throw new HttpException('Parameter is required', HttpStatus.BAD_REQUEST);

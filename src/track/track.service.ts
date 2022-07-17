@@ -22,6 +22,10 @@ export class TrackService {
     return track;
   }
 
+  async getOne(id: string): Promise<TrackEntity | undefined> {
+    return  this.trackRepositoryService.getOne(id);
+  }
+
   async create(dto: CreateTrackDto): Promise<TrackEntity> {
     if (dto.name === undefined
       || dto.duration === undefined

@@ -27,6 +27,10 @@ export class AlbumService {
     return album;
   }
 
+  async getOne(id: string): Promise<AlbumEntity | undefined> {
+    return this.albumRepositoryService.getOne(id);
+  }
+
   async create(dto: CreateAlbumDto): Promise<AlbumEntity> {
     if (dto.name === undefined
       || dto.year === undefined
