@@ -53,8 +53,10 @@ export class ArtistController {
   async update(
     @Param('id', new ParseUUIDPipe()) artistId: string,
     @Body() dto: UpdateArtistDto,
-  ): Promise<void> {
-    await this.artistService.update(artistId, dto);
+  ): Promise<ArtistModel> {
+    const artist = await this.artistService.update(artistId, dto);
+
+    return ArtistModel.createNewFromEntity(artist);
   }
 
   @UseInterceptors(ClassSerializerInterceptor)

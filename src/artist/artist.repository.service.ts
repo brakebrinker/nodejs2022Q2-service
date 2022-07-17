@@ -9,7 +9,7 @@ export class ArtistRepositoryService {
   }
 
   async getOne(id: string): Promise<ArtistEntity | undefined> {
-    return artists.find((artist: ArtistEntity): boolean => artist.id === id);
+    return artists.find((entity: ArtistEntity): boolean => entity.id === id);
   }
 
   async save(entity: ArtistEntity): Promise<ArtistEntity> {
@@ -21,15 +21,15 @@ export class ArtistRepositoryService {
       return entity;
     }
 
-    for (const artistKey in entity) {
-      existedEntity[artistKey] = entity[artistKey];
+    for (const entityKey in entity) {
+      existedEntity[entityKey] = entity[entityKey];
     }
 
     return existedEntity;
   }
 
   async delete(id: string): Promise<void> {
-    const userIndex = artists.findIndex((artist) => artist.id === id);
+    const userIndex = artists.findIndex((entity) => entity.id === id);
 
     artists.splice(userIndex, 1);
   }
