@@ -13,7 +13,7 @@ import {
   UseInterceptors
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
-import { AlbumModel } from './artist.model';
+import { AlbumModel } from './album.model';
 import { AlbumEntity } from './album.entity';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';

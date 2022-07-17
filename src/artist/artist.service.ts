@@ -6,12 +6,15 @@ import { UpdateArtistDto } from './dto/update-artist.dto';
 import { AlbumRepositoryService } from '../album/album.repository.service';
 import { albums } from '../data';
 import { AlbumEntity } from '../album/album.entity';
+import { TrackRepositoryService } from '../track/track.repository.service';
+import { TrackEntity } from '../track/track.entity';
 
 @Injectable()
 export class ArtistService {
   constructor(
     private readonly artistRepositoryService: ArtistRepositoryService,
     private readonly albumRepositoryService: AlbumRepositoryService,
+    private readonly trackRepositoryService: TrackRepositoryService,
   ) {}
 
   async findMany(): Promise<ArtistEntity[]> {
@@ -64,6 +67,12 @@ export class ArtistService {
 
     relatedAlbums.forEach((album: AlbumEntity): void => {
       album.setArtistId(null);
+    })
+
+    const relatedTracks = await this.trackRepositoryService.getManyByArtistId(artist.id);
+
+    relatedTracks.forEach((track: TrackEntity): void => {
+      track.setArtistId(null);
     })
 
     return artist;

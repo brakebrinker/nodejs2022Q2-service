@@ -3,10 +3,15 @@ import { AlbumRepositoryService } from './album.repository.service';
 import { AlbumEntity } from './album.entity';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
+import { TrackEntity } from '../track/track.entity';
+import { TrackRepositoryService } from '../track/track.repository.service';
 
 @Injectable()
 export class AlbumService {
-  constructor(private readonly albumRepositoryService: AlbumRepositoryService) {}
+  constructor(
+    private readonly albumRepositoryService: AlbumRepositoryService,
+    private readonly trackRepositoryService: TrackRepositoryService,
+  ) {}
 
   async findMany(): Promise<AlbumEntity[]> {
     return this.albumRepositoryService.getMany();
@@ -61,6 +66,12 @@ export class AlbumService {
     const album = await this.getOneOrFail(id);
 
     await this.albumRepositoryService.delete(album.id);
+
+    const relatedTracks = await this.trackRepositoryService.getManyByAlbumId(album.id);
+
+    relatedTracks.forEach((track: TrackEntity): void => {
+      track.setAlbumId(null);
+    })
 
     return album;
   }
