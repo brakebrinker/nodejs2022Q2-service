@@ -3,7 +3,7 @@ import { randomUUID } from 'crypto';
 type CreateArgs = {
   readonly name: string;
   readonly year: number;
-  readonly artistId: string;
+  readonly artistId: string | null;
   readonly id?: string;
 }
 
@@ -14,7 +14,7 @@ export class AlbumEntity {
 
   private year: number;
 
-  private artistId: string;
+  private artistId: string | null;
 
   constructor(args: CreateArgs) {
     const {
@@ -38,11 +38,11 @@ export class AlbumEntity {
     this.year = year;
   }
 
-  getArtistId(): string {
+  getArtistId(): string | null {
     return this.artistId;
   }
 
-  setArtistId(artistId: string): void {
+  setArtistId(artistId: string | null): void {
     this.artistId = artistId;
   }
 
