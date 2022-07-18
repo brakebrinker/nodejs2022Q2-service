@@ -10,7 +10,9 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
-  UseInterceptors, UsePipes, ValidationPipe,
+  UseInterceptors,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { AlbumModel } from './album.model';

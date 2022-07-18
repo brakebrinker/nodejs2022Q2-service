@@ -36,7 +36,10 @@ export class UserService {
     return this.userRepositoryService.save(user);
   }
 
-  async updatePassword(id: string, dto: UpdatePasswordDto): Promise<UserEntity> {
+  async updatePassword(
+    id: string,
+    dto: UpdatePasswordDto,
+  ): Promise<UserEntity> {
     if (dto.oldPassword === undefined || dto.newPassword === undefined) {
       throw new HttpException('Parameter is required', HttpStatus.BAD_REQUEST);
     }

@@ -10,7 +10,9 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
-  UseInterceptors, UsePipes, ValidationPipe,
+  UseInterceptors,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ArtistService } from './artist.service';
 import { ArtistModel } from './artist.model';

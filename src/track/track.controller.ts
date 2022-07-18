@@ -10,7 +10,9 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
-  UseInterceptors, UsePipes, ValidationPipe,
+  UseInterceptors,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { TrackService } from './track.service';
 import { TrackModel } from './track.model';

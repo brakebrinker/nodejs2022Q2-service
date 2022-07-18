@@ -10,7 +10,9 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
-  UseInterceptors, UsePipes, ValidationPipe,
+  UseInterceptors,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UserModel } from './user.model';
 import { UserService } from './user.service';
