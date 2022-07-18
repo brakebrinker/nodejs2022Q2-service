@@ -8,11 +8,7 @@ export class UpdateTrackDto {
   @IsNumber()
   duration: number;
 
-  @IsString()
-  @IsNotEmpty()
-  artistId: string;
+  artistId: string | null;
 
-  @IsString()
-  @IsNotEmpty()
-  albumId: string;
+  albumId: string | null;
 }

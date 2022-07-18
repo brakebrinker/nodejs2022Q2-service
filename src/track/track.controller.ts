@@ -10,7 +10,7 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
-  UseInterceptors,
+  UseInterceptors, UsePipes, ValidationPipe,
 } from '@nestjs/common';
 import { TrackService } from './track.service';
 import { TrackModel } from './track.model';
@@ -42,6 +42,7 @@ export class TrackController {
     return TrackModel.createNewFromEntity(track);
   }
 
+  @UsePipes(new ValidationPipe())
   @UseInterceptors(ClassSerializerInterceptor)
   @Post('')
   async create(@Body() dto: CreateTrackDto): Promise<TrackModel> {
@@ -50,6 +51,7 @@ export class TrackController {
     return TrackModel.createNewFromEntity(track);
   }
 
+  @UsePipes(new ValidationPipe())
   @UseInterceptors(ClassSerializerInterceptor)
   @Put(':id')
   async update(

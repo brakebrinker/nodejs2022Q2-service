@@ -32,15 +32,6 @@ export class TrackService {
   }
 
   async create(dto: CreateTrackDto): Promise<TrackEntity> {
-    if (
-      dto.name === undefined ||
-      dto.duration === undefined ||
-      dto.artistId === undefined ||
-      dto.albumId === undefined
-    ) {
-      throw new HttpException('Parameter is required', HttpStatus.BAD_REQUEST);
-    }
-
     const track = new TrackEntity({
       name: dto.name,
       duration: dto.duration,

@@ -8,7 +8,5 @@ export class UpdateAlbumDto {
   @IsNumber()
   year: number;
 
-  @IsString()
-  @IsNotEmpty()
   artistId: string;
 }

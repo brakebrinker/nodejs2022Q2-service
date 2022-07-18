@@ -38,16 +38,16 @@ export const tracks = [
 ];
 
 export const favorites = [
-  new FavoriteEntity({
-    type: FavoriteTypeEnum.ARTISTS,
-    unitId: artists[0].id,
-  }),
-  new FavoriteEntity({
-    type: FavoriteTypeEnum.ALBUMS,
-    unitId: albums[0].id,
-  }),
-  new FavoriteEntity({
-    type: FavoriteTypeEnum.TRACKS,
-    unitId: tracks[0].id,
-  }),
+  // new FavoriteEntity({
+  //   type: FavoriteTypeEnum.ARTISTS,
+  //   unitId: artists[0].id,
+  // }),
+  // new FavoriteEntity({
+  //   type: FavoriteTypeEnum.ALBUMS,
+  //   unitId: albums[0].id,
+  // }),
+  // new FavoriteEntity({
+  //   type: FavoriteTypeEnum.TRACKS,
+  //   unitId: tracks[0].id,
+  // }),
 ];

@@ -22,7 +22,7 @@ export class FavoriteRepositoryService {
   }
 
   async save(unitId: string, type: FavoriteTypeEnum): Promise<FavoriteEntity> {
-    const existedEntity = this.getOneByUnitIdAndType(unitId, type);
+    const existedEntity = await this.getOneByUnitIdAndType(unitId, type);
 
     if (existedEntity !== undefined) {
       return existedEntity;

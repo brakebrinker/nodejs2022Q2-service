@@ -10,7 +10,7 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
-  UseInterceptors,
+  UseInterceptors, UsePipes, ValidationPipe,
 } from '@nestjs/common';
 import { ArtistService } from './artist.service';
 import { ArtistModel } from './artist.model';
@@ -42,6 +42,7 @@ export class ArtistController {
     return ArtistModel.createNewFromEntity(artist);
   }
 
+  @UsePipes(new ValidationPipe())
   @UseInterceptors(ClassSerializerInterceptor)
   @Post('')
   async create(@Body() dto: CreateArtistDto): Promise<ArtistModel> {
@@ -50,6 +51,7 @@ export class ArtistController {
     return ArtistModel.createNewFromEntity(artist);
   }
 
+  @UsePipes(new ValidationPipe())
   @UseInterceptors(ClassSerializerInterceptor)
   @Put(':id')
   async update(

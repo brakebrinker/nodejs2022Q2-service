@@ -10,7 +10,7 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
-  UseInterceptors,
+  UseInterceptors, UsePipes, ValidationPipe,
 } from '@nestjs/common';
 import { UserModel } from './user.model';
 import { UserService } from './user.service';
@@ -42,6 +42,7 @@ export class UserController {
     return UserModel.createNewFromEntity(user);
   }
 
+  @UsePipes(new ValidationPipe())
   @UseInterceptors(ClassSerializerInterceptor)
   @Post('')
   async create(@Body() dto: CreateUserDto): Promise<UserModel> {
@@ -50,13 +51,16 @@ export class UserController {
     return UserModel.createNewFromEntity(user);
   }
 
+  @UsePipes(new ValidationPipe())
   @UseInterceptors(ClassSerializerInterceptor)
   @Put(':id')
   async updatePassword(
     @Param('id', new ParseUUIDPipe()) userId: string,
     @Body() dto: UpdatePasswordDto,
-  ): Promise<void> {
-    await this.userService.updatePassword(userId, dto);
+  ): Promise<UserModel> {
+    const user = await this.userService.updatePassword(userId, dto);
+
+    return UserModel.createNewFromEntity(user);
   }
 
   @UseInterceptors(ClassSerializerInterceptor)

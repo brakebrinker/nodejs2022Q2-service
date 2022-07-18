@@ -35,14 +35,6 @@ export class AlbumService {
   }
 
   async create(dto: CreateAlbumDto): Promise<AlbumEntity> {
-    if (
-      dto.name === undefined ||
-      dto.year === undefined ||
-      dto.artistId === undefined
-    ) {
-      throw new HttpException('Parameter is required', HttpStatus.BAD_REQUEST);
-    }
-
     const album = new AlbumEntity({
       name: dto.name,
       year: dto.year,
