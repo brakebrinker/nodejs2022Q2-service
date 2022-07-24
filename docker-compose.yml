@@ -1,0 +1,35 @@
+version: '3.3'
+
+services:
+  backend:
+    build: .
+    restart: always
+    ports:
+      - ${PORT}:4000
+    networks:
+      - user-defined
+    depends_on:
+      - db
+  db:
+    #platform: linux/x86_64 ##enable this line for MAC
+    build:
+      context: .
+      dockerfile: db.Dockerfile
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    restart: always
+    ports:
+      - ${POSTGRES_PORT}:5432
+    networks:
+      - user-defined
+    volumes:
+      - ./db-data/:/var/lib/postgresql/data/
+
+volumes:
+  db: ~
+
+networks:
+  user-defined:
+    driver: bridge

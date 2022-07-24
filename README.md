@@ -1,25 +1,40 @@
 # Home Library Service
 
-# Scoring: REST Service
+## Running by Docker
 
-## My own Scope
+1. To start application
+```
+docker-compose up
+```
 
-- **+10** The repository with the application contains a `Readme.md` file containing detailed instructions for installing, running and using the application
-- **+10** The application code that worked with `Users` instance divided into modules according to to its purpose and Nest.js architecture conventions (work with request and response in controller, business logic in service, etc.)
-- **+10** The application code that worked with `Tracks` instance instance divided into modules according to to its purpose and Nest.js architecture conventions (work with request and response in controller, business logic in service, etc.)
-- **+10** The application code that worked with `Albums` instance instance divided into modules according to to its purpose and Nest.js architecture conventions (work with request and response in controller, business logic in service, etc.)
-- **+10** The application code that worked with `Artists` instance instance divided into modules according to to its purpose and Nest.js architecture conventions (work with request and response in controller, business logic in service, etc.)
-- **+10** The application code that worked with `Favorites` instance instance divided into modules according to to its purpose and Nest.js architecture conventions (work with request and response in controller, business logic in service, etc.)
-- **+10** For each successfully passed test
+2. To build docker
+```
+docker-compose up --build
+```
 
-## Advanced Scope
-- **+10** PORT value is stored into `.env` file
-- **+20** OpenAPI spec in `doc` folder corresponds with assignment
+### Troubleshooting 
+In case if you face this error
+```
+Building db
+[+] Building 0.0s (1/2)
+ => ERROR [internal] load build definition from db.Dockerfile                                                                                                                                                                0.0s
+ => => transferring dockerfile: 86B                                                                                                                                                                                          0.0s
+------
+ > [internal] load build definition from db.Dockerfile:
+------
+failed to solve with frontend dockerfile.v0: failed to read dockerfile: error from sender: open /home/max/projects/nodejs/rss/nodejs2022Q2-service/db-data: permission denied
+ERROR: Service 'db' failed to build : Build failed
+```
+Just run this command with your userId and groupId
+```
+sudo chown -R $(id -u):$(id -g) db-data
+```
 
-## Forfeits
-- **-30% of max task score** Commits after deadline (except commits that affect only Readme.md, .gitignore, etc.)
+### Links to docker hub images
+- Backend - [Backend latest](https://hub.docker.com/layers/nodejs-rss-service/drummen11/nodejs-rss-service/backend-latest/images/sha256-80d6216aef734ffa2a3a3d698f5d30129cccc199b6886c148bb74dd01874c8ef?context=explore).
+- Postgres - [DB latest](https://hub.docker.com/layers/nodejs-rss-service/drummen11/nodejs-rss-service/db-latest/images/sha256-30785779c9a02a688387f8c0c2915c1886ebf87e754b0c8474a76dee1b8342f0?context=explore).
+- Docker hub repository for this task [Repository](https://hub.docker.com/r/drummen11/nodejs-rss-service/tags)
 
-### Total: 70
 
 ## Prerequisites
 
