@@ -1,33 +1,35 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { UserEntity } from './user.entity';
-import { UserRepositoryService } from './user.repository.service';
+import { User } from './user';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
+import { UserRepositoryService } from './user.repository.service';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepositoryService: UserRepositoryService) {}
+  constructor(
+    private readonly userRepositoryService: UserRepositoryService,
+  ) {}
 
-  async findMany(): Promise<UserEntity[]> {
-    return this.userRepositoryService.getMany();
+  async findMany(): Promise<User[]> {
+    return this.userRepositoryService.findAll();
   }
 
-  async getOneOrFail(id: string): Promise<UserEntity> {
-    const user = await this.userRepositoryService.getOne(id);
+  async getOneOrFail(id: string): Promise<User> {
+    const user = await this.userRepositoryService.getOneById(id);
 
-    if (user === undefined) {
+    if (user === null) {
       throw new HttpException('User does not exist', HttpStatus.NOT_FOUND);
     }
 
     return user;
   }
 
-  async create(dto: CreateUserDto): Promise<UserEntity> {
+  async create(dto: CreateUserDto): Promise<User> {
     if (dto.login === undefined || dto.password === undefined) {
       throw new HttpException('Parameter is required', HttpStatus.BAD_REQUEST);
     }
 
-    const user = new UserEntity({
+    const user = new User({
       login: dto.login,
       password: dto.password,
       version: 1,
@@ -39,7 +41,7 @@ export class UserService {
   async updatePassword(
     id: string,
     dto: UpdatePasswordDto,
-  ): Promise<UserEntity> {
+  ): Promise<User> {
     if (dto.oldPassword === undefined || dto.newPassword === undefined) {
       throw new HttpException('Parameter is required', HttpStatus.BAD_REQUEST);
     }
@@ -54,14 +56,12 @@ export class UserService {
     user.setUpdatedAt(new Date().getTime());
     user.updateVersion();
 
-    return user;
+    return this.userRepositoryService.save(user);
   }
 
-  async delete(id: string): Promise<UserEntity> {
+  async delete(id: string): Promise<User> {
     const user = await this.getOneOrFail(id);
 
-    await this.userRepositoryService.delete(user.id);
-
-    return user;
+    return this.userRepositoryService.delete(user);
   }
 }

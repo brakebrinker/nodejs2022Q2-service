@@ -42,3 +42,6 @@ nest
 /.env.*
 !/.env.dist
 !/.env.*.dist
+
+# DB
+/db-data
