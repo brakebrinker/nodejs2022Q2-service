@@ -16,7 +16,7 @@ import {
 } from '@nestjs/common';
 import { UserModel } from './user.model';
 import { UserService } from './user.service';
-import { User } from './user';
+import { UserEntity } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 
@@ -29,7 +29,7 @@ export class UserController {
   async getUsers(): Promise<UserModel[]> {
     const users = await this.userService.findMany();
 
-    return users.map((user: User): UserModel => {
+    return users.map((user: UserEntity): UserModel => {
       return UserModel.createNewFromEntity(user);
     });
   }

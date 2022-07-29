@@ -1,28 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { User } from './user';
+import { UserEntity } from './user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import {
+  AbstractRepositoryService
+} from '../repositories/abstract.repository.service';
 
 @Injectable()
-export class UserRepositoryService {
+export class UserRepositoryService extends AbstractRepositoryService<UserEntity>{
   constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
-  ) {}
-
-  async findAll(): Promise<User[]> {
-    return this.userRepository.find();
-  }
-
-  async getOneById(id: string): Promise<User | null> {
-    return this.userRepository.findOneBy({ id });
-  }
-
-  async save(entity: User): Promise<User> {
-    return this.userRepository.save(entity);
-  }
-
-  async delete(entity: User): Promise<User> {
-    return this.userRepository.remove(entity);
+    @InjectRepository(UserEntity)
+    repository: Repository<UserEntity>,
+  ) {
+    super(repository);
   }
 }

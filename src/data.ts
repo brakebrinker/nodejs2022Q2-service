@@ -1,10 +1,10 @@
-import { User } from './user/user';
+import { UserEntity } from './user/user.entity';
 import { ArtistEntity } from './artist/artist.entity';
 import { AlbumEntity } from './album/album.entity';
 import { TrackEntity } from './track/track.entity';
 
 export const users = [
-  new User({
+  new UserEntity({
     login: 'mark',
     password: 'test1234',
     version: 1,

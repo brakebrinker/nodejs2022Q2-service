@@ -3,38 +3,38 @@ import { ArtistRepositoryService } from './artist.repository.service';
 import { ArtistEntity } from './artist.entity';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
-import { AlbumRepositoryService } from '../album/album.repository.service';
+// import { AlbumRepositoryService } from '../album/album.repository.service';
 import { AlbumEntity } from '../album/album.entity';
-import { TrackRepositoryService } from '../track/track.repository.service';
+// import { TrackRepositoryService } from '../track/track.repository.service';
 import { TrackEntity } from '../track/track.entity';
-import { FavoriteRepositoryService } from '../favorite/favorite.repository.service';
+// import { FavoriteRepositoryService } from '../favorite/favorite.repository.service';
 import { FavoriteTypeEnum } from '../favorite/favorite-type.enum';
 
 @Injectable()
 export class ArtistService {
   constructor(
     private readonly artistRepositoryService: ArtistRepositoryService,
-    private readonly albumRepositoryService: AlbumRepositoryService,
-    private readonly trackRepositoryService: TrackRepositoryService,
-    private readonly favoriteRepositoryService: FavoriteRepositoryService,
+    // private readonly albumRepositoryService: AlbumRepositoryService,
+    // private readonly trackRepositoryService: TrackRepositoryService,
+    // private readonly favoriteRepositoryService: FavoriteRepositoryService,
   ) {}
 
   async findMany(): Promise<ArtistEntity[]> {
-    return this.artistRepositoryService.getMany();
+    return this.artistRepositoryService.findAll();
   }
 
   async getOneOrFail(id: string): Promise<ArtistEntity> {
-    const artist = await this.artistRepositoryService.getOne(id);
+    const artist = await this.artistRepositoryService.getOneById({ id });
 
-    if (artist === undefined) {
+    if (artist === null) {
       throw new HttpException('Artist does not exist', HttpStatus.NOT_FOUND);
     }
 
     return artist;
   }
 
-  async getOne(id: string): Promise<ArtistEntity | undefined> {
-    return this.artistRepositoryService.getOne(id);
+  async getOne(id: string): Promise<ArtistEntity | null> {
+    return this.artistRepositoryService.getOneById({ id });
   }
 
   async create(dto: CreateArtistDto): Promise<ArtistEntity> {
@@ -63,33 +63,33 @@ export class ArtistService {
   async delete(id: string): Promise<ArtistEntity> {
     const artist = await this.getOneOrFail(id);
 
-    await this.artistRepositoryService.delete(artist.id);
+    await this.artistRepositoryService.delete(artist);
 
-    const relatedAlbums = await this.albumRepositoryService.getManyByArtistId(
-      artist.id,
-    );
-
-    relatedAlbums.forEach((album: AlbumEntity): void => {
-      album.setArtistId(null);
-    });
-
-    const relatedTracks = await this.trackRepositoryService.getManyByArtistId(
-      artist.id,
-    );
-
-    relatedTracks.forEach((track: TrackEntity): void => {
-      track.setArtistId(null);
-    });
-
-    const relatedFavorite =
-      await this.favoriteRepositoryService.getOneByUnitIdAndType(
-        artist.id,
-        FavoriteTypeEnum.ARTISTS,
-      );
-
-    if (relatedFavorite !== undefined) {
-      await this.favoriteRepositoryService.delete(relatedFavorite.id);
-    }
+    // const relatedAlbums = await this.albumRepositoryService.getManyByArtistId(
+    //   artist.id,
+    // );
+    //
+    // relatedAlbums.forEach((album: AlbumEntity): void => {
+    //   album.setArtistId(null);
+    // });
+    //
+    // const relatedTracks = await this.trackRepositoryService.getManyByArtistId(
+    //   artist.id,
+    // );
+    //
+    // relatedTracks.forEach((track: TrackEntity): void => {
+    //   track.setArtistId(null);
+    // });
+    //
+    // const relatedFavorite =
+    //   await this.favoriteRepositoryService.getOneByUnitIdAndType(
+    //     artist.id,
+    //     FavoriteTypeEnum.ARTISTS,
+    //   );
+    //
+    // if (relatedFavorite !== undefined) {
+    //   await this.favoriteRepositoryService.delete(relatedFavorite.id);
+    // }
 
     return artist;
   }

@@ -1,4 +1,5 @@
 import { randomUUID } from 'crypto';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 type CreateArgs = {
   readonly name: string;
@@ -6,14 +7,22 @@ type CreateArgs = {
   readonly id?: string;
 };
 
+@Entity('artist')
 export class ArtistEntity {
+  @PrimaryColumn('char', { length: 36 })
   readonly id: string;
 
+  @Column()
   private name: string;
 
+  @Column({ type: Boolean})
   private grammy: boolean;
 
   constructor(args: CreateArgs) {
+    if (arguments.length === 0) {
+      return;
+    }
+
     const { name, grammy } = args;
 
     this.name = name;

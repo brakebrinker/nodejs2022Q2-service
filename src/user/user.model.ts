@@ -1,4 +1,4 @@
-import { User } from './user';
+import { UserEntity } from './user.entity';
 import { Exclude } from 'class-transformer';
 
 type CreateArgs = {
@@ -40,7 +40,7 @@ export class UserModel {
     this.updatedAt = updatedAt;
   }
 
-  static createNewFromEntity(entity: User): UserModel {
+  static createNewFromEntity(entity: UserEntity): UserModel {
     return new this({
       id: entity.id,
       login: entity.login,

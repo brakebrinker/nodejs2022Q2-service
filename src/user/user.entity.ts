@@ -15,7 +15,7 @@ type CreateArgs = {
 };
 
 @Entity('user')
-export class User {
+export class UserEntity {
   @PrimaryColumn('char', { length: 36 })
   readonly id: string;
 

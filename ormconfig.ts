@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 import { DataSource } from 'typeorm';
-import { User } from './src/user/user';
+import { UserEntity } from './src/user/user.entity';
+import { ArtistEntity } from './src/artist/artist.entity';
 
 dotenv.config();
 
@@ -12,7 +13,7 @@ export default new DataSource({
   password: process.env.POSTGRES_PASSWORD as string,
   database: process.env.POSTGRES_DB as string,
   synchronize: true,
-  entities: [User],
+  entities: [UserEntity, ArtistEntity],
   migrations: ['dist/migration/*.js'],
   migrationsRun: true,
 });
