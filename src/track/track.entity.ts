@@ -1,5 +1,12 @@
 import { randomUUID } from 'crypto';
-import { Column, Entity, ManyToOne, ObjectType, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  ObjectType,
+  PrimaryColumn,
+  RelationId,
+} from 'typeorm';
 import { ArtistEntity } from '../artist/artist.entity';
 import { AlbumEntity } from '../album/album.entity';
 
@@ -28,11 +35,17 @@ export class TrackEntity {
   })
   private artist: Promise<ArtistEntity> | ArtistEntity | null;
 
+  @RelationId((track: TrackEntity) => track.artist)
+  readonly artistId: string | null;
+
   @ManyToOne((): ObjectType<AlbumEntity> => AlbumEntity, {
     nullable: true,
-    lazy: true
+    lazy: true,
   })
   private album: Promise<AlbumEntity> | AlbumEntity | null;
+
+  @RelationId((track: TrackEntity) => track.album)
+  readonly albumId: string | null;
 
   constructor(args: CreateArgs) {
     if (arguments.length === 0) {

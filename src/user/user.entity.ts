@@ -1,9 +1,5 @@
 import { randomUUID } from 'crypto';
-import {
-  Column,
-  Entity,
-  PrimaryColumn
-} from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 type CreateArgs = {
   readonly login: string;

@@ -33,12 +33,12 @@ export class FavoritesResultModel {
         return ArtistModel.createNewFromEntity(artist);
       },
     );
-    //
-    // const albums = favoritesResult.albums.map(
-    //   (album: AlbumEntity): AlbumModel => {
-    //     return AlbumModel.createNewFromEntity(album);
-    //   },
-    // );
+
+    const albums = favoritesResult.albums.map(
+      (album: AlbumEntity): AlbumModel => {
+        return AlbumModel.createNewFromEntity(album);
+      },
+    );
 
     const tracks = favoritesResult.tracks.map(
       (track: TrackEntity): TrackModel => {
@@ -48,7 +48,7 @@ export class FavoritesResultModel {
 
     return new this({
       artists,
-      albums: [],
+      albums,
       tracks,
     });
   }

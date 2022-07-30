@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ArtistEntity } from './artist.entity';
-import {
-  AbstractRepositoryService
-} from '../repositories/abstract.repository.service';
+import { AbstractRepositoryService } from '../repositories/abstract.repository.service';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -10,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 export class ArtistRepositoryService extends AbstractRepositoryService<ArtistEntity> {
   constructor(
     @InjectRepository(ArtistEntity)
-    repository: Repository<ArtistEntity>
+    repository: Repository<ArtistEntity>,
   ) {
     super(repository);
   }

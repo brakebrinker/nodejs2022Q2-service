@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { AlbumEntity } from './album.entity';
-import {
-  AbstractRepositoryService
-} from '../repositories/abstract.repository.service';
+import { AbstractRepositoryService } from '../repositories/abstract.repository.service';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
-export class AlbumRepositoryService extends AbstractRepositoryService<AlbumEntity>{
+export class AlbumRepositoryService extends AbstractRepositoryService<AlbumEntity> {
   constructor(
     @InjectRepository(AlbumEntity)
     repository: Repository<AlbumEntity>,
@@ -18,12 +16,13 @@ export class AlbumRepositoryService extends AbstractRepositoryService<AlbumEntit
   //   return albums;
   // }
 
-  // async getManyByArtistId(artistId: string): Promise<AlbumEntity[]> {
-  //   return albums.filter(
-  //     (album: AlbumEntity): boolean => album.getArtistId() === artistId,
-  //   );
-  // }
-  //
+  async getManyByArtist(artistId: string): Promise<AlbumEntity[]> {
+    return this.repository
+      .createQueryBuilder('album')
+      .andWhere('album.artistId = :artistId', { artistId })
+      .getMany();
+  }
+
   // async getOne(id: string): Promise<AlbumEntity | undefined> {
   //   return albums.find((entity: AlbumEntity): boolean => entity.id === id);
   // }

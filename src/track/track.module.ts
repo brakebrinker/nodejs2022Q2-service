@@ -9,16 +9,28 @@ import { ArtistRepositoryService } from '../artist/artist.repository.service';
 import { AlbumRepositoryService } from '../album/album.repository.service';
 import { ArtistEntity } from '../artist/artist.entity';
 import { AlbumEntity } from '../album/album.entity';
+import { FavoriteEntity } from '../favorite/favorite.entity';
+import { ArtistService } from '../artist/artist.service';
+import { AlbumService } from '../album/album.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TrackEntity, ArtistEntity, AlbumEntity])],
+  imports: [
+    TypeOrmModule.forFeature([
+      TrackEntity,
+      ArtistEntity,
+      AlbumEntity,
+      FavoriteEntity,
+    ]),
+  ],
   controllers: [TrackController],
   providers: [
     TrackService,
     TrackRepositoryService,
     ArtistRepositoryService,
+    ArtistService,
     AlbumRepositoryService,
-    // FavoriteRepositoryService
+    AlbumService,
+    FavoriteRepositoryService,
   ],
 })
 export class TrackModule {}

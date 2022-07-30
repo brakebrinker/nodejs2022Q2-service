@@ -4,6 +4,7 @@ import { UserEntity } from './src/user/user.entity';
 import { ArtistEntity } from './src/artist/artist.entity';
 import { AlbumEntity } from './src/album/album.entity';
 import { TrackEntity } from './src/track/track.entity';
+import { FavoriteEntity } from './src/favorite/favorite.entity';
 
 dotenv.config();
 
@@ -15,7 +16,7 @@ export default new DataSource({
   password: process.env.POSTGRES_PASSWORD as string,
   database: process.env.POSTGRES_DB as string,
   synchronize: true,
-  entities: [UserEntity, ArtistEntity, AlbumEntity, TrackEntity],
+  entities: [UserEntity, ArtistEntity, AlbumEntity, TrackEntity, FavoriteEntity],
   migrations: ['dist/src/migration/*.js'],
   migrationsRun: true,
 });

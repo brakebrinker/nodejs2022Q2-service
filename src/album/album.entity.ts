@@ -4,7 +4,8 @@ import {
   Entity,
   ManyToOne,
   ObjectType,
-  PrimaryColumn
+  PrimaryColumn,
+  RelationId,
 } from 'typeorm';
 import { ArtistEntity } from '../artist/artist.entity';
 
@@ -31,6 +32,9 @@ export class AlbumEntity {
     lazy: true,
   })
   private artist: Promise<ArtistEntity> | ArtistEntity | null;
+
+  @RelationId((album: AlbumEntity) => album.artist)
+  readonly artistId: string | null;
 
   constructor(args: CreateArgs) {
     if (arguments.length === 0) {

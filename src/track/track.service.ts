@@ -5,16 +5,16 @@ import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { FavoriteTypeEnum } from '../favorite/favorite-type.enum';
 import { FavoriteRepositoryService } from '../favorite/favorite.repository.service';
-import { ArtistRepositoryService } from '../artist/artist.repository.service';
-import { AlbumRepositoryService } from '../album/album.repository.service';
+import { ArtistService } from '../artist/artist.service';
+import { AlbumService } from '../album/album.service';
 
 @Injectable()
 export class TrackService {
   constructor(
     private readonly trackRepositoryService: TrackRepositoryService,
-    private readonly artistRepositoryService: ArtistRepositoryService,
-    private readonly albumRepositoryService: AlbumRepositoryService,
-    // private readonly favoriteRepositoryService: FavoriteRepositoryService,
+    private readonly artistService: ArtistService,
+    private readonly albumService: AlbumService,
+    private readonly favoriteRepositoryService: FavoriteRepositoryService,
   ) {}
 
   async findMany(): Promise<TrackEntity[]> {
@@ -22,7 +22,7 @@ export class TrackService {
   }
 
   async getOneOrFail(id: string): Promise<TrackEntity> {
-    const track = await this.trackRepositoryService.getOneById({ id });
+    const track = await this.trackRepositoryService.getOneById(id);
 
     if (track === null) {
       throw new HttpException('Track does not exist', HttpStatus.NOT_FOUND);
@@ -31,13 +31,9 @@ export class TrackService {
     return track;
   }
 
-  // async getOne(id: string): Promise<TrackEntity | undefined> {
-  //   return this.trackRepositoryService.getOne(id);
-  // }
-
   async create(dto: CreateTrackDto): Promise<TrackEntity> {
-    const artist = await this.artistRepositoryService.getOneById({ id: dto.artistId});
-    const album = await this.albumRepositoryService.getOneById({ id: dto.albumId});
+    const artist = await this.artistService.getOne(dto.artistId);
+    const album = await this.albumService.getOne(dto.albumId);
 
     const track = new TrackEntity({
       name: dto.name,
@@ -61,13 +57,13 @@ export class TrackService {
     }
 
     if (dto.artistId !== undefined) {
-      const artist = await this.artistRepositoryService.getOneById({ id: dto.artistId});
+      const artist = await this.artistService.getOne(dto.artistId);
 
       track.setArtist(artist);
     }
 
     if (dto.albumId !== undefined) {
-      const album = await this.albumRepositoryService.getOneById({ id: dto.albumId});
+      const album = await this.albumService.getOne(dto.albumId);
 
       track.setAlbum(album);
     }
@@ -78,18 +74,16 @@ export class TrackService {
   async delete(id: string): Promise<TrackEntity> {
     const track = await this.getOneOrFail(id);
 
-    await this.trackRepositoryService.delete(track);
-    //
-    // const relatedFavorite =
-    //   await this.favoriteRepositoryService.getOneByUnitIdAndType(
-    //     track.id,
-    //     FavoriteTypeEnum.TRACKS,
-    //   );
-    //
-    // if (relatedFavorite !== undefined) {
-    //   await this.favoriteRepositoryService.delete(relatedFavorite.id);
-    // }
+    const relatedFavorite =
+      await this.favoriteRepositoryService.getOneByTrackAndType({
+        trackId: track.id,
+        type: FavoriteTypeEnum.TRACKS,
+      });
 
-    return track;
+    if (relatedFavorite !== null) {
+      await this.favoriteRepositoryService.delete(relatedFavorite);
+    }
+
+    return this.trackRepositoryService.delete(track);
   }
 }

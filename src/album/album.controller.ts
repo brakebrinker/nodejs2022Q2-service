@@ -29,8 +29,8 @@ export class AlbumController {
   async getAlbums(): Promise<AlbumModel[]> {
     const albums = await this.albumService.findMany();
 
-    return Promise.all(albums.map(
-      async (album: AlbumEntity): Promise<AlbumModel> => {
+    return Promise.all(
+      albums.map(async (album: AlbumEntity): Promise<AlbumModel> => {
         return AlbumModel.createNewFromEntity(album);
       }),
     );

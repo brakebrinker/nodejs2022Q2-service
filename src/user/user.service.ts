@@ -6,16 +6,14 @@ import { UserRepositoryService } from './user.repository.service';
 
 @Injectable()
 export class UserService {
-  constructor(
-    private readonly userRepositoryService: UserRepositoryService,
-  ) {}
+  constructor(private readonly userRepositoryService: UserRepositoryService) {}
 
   async findMany(): Promise<UserEntity[]> {
     return this.userRepositoryService.findAll();
   }
 
   async getOneOrFail(id: string): Promise<UserEntity> {
-    const user = await this.userRepositoryService.getOneById({ id });
+    const user = await this.userRepositoryService.getOneById(id);
 
     if (user === null) {
       throw new HttpException('User does not exist', HttpStatus.NOT_FOUND);

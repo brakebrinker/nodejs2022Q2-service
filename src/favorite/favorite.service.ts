@@ -4,9 +4,10 @@ import { ArtistEntity } from '../artist/artist.entity';
 import { AlbumEntity } from '../album/album.entity';
 import { TrackEntity } from '../track/track.entity';
 import { FavoriteTypeEnum } from './favorite-type.enum';
-import { ArtistService } from '../artist/artist.service';
-import { AlbumService } from '../album/album.service';
-import { TrackService } from '../track/track.service';
+import { ArtistRepositoryService } from '../artist/artist.repository.service';
+import { FavoriteEntity } from './favorite.entity';
+import { AlbumRepositoryService } from '../album/album.repository.service';
+import { TrackRepositoryService } from '../track/track.repository.service';
 
 export type FavoritesResult = {
   readonly artists: ArtistEntity[];
@@ -18,139 +19,150 @@ export type FavoritesResult = {
 export class FavoriteService {
   constructor(
     private readonly favoriteRepositoryService: FavoriteRepositoryService,
-    private readonly artistService: ArtistService,
-    private readonly albumService: AlbumService,
-    private readonly trackService: TrackService,
+    private readonly artistRepositoryService: ArtistRepositoryService,
+    private readonly albumRepositoryService: AlbumRepositoryService,
+    private readonly trackRepositoryService: TrackRepositoryService,
   ) {}
-  // async findMany(): Promise<FavoritesResult> {
-  //   const favoriteArtists = await this.favoriteRepositoryService.getManyByType(
-  //     FavoriteTypeEnum.ARTISTS,
-  //   );
-  //   const favoriteAlbums = await this.favoriteRepositoryService.getManyByType(
-  //     FavoriteTypeEnum.ALBUMS,
-  //   );
-  //   const favoriteTracks = await this.favoriteRepositoryService.getManyByType(
-  //     FavoriteTypeEnum.TRACKS,
-  //   );
-  //
-  //   const artists = await Promise.all(
-  //     favoriteArtists.map(async (favoriteArtist): Promise<ArtistEntity> => {
-  //       return this.artistService.getOneOrFail(favoriteArtist.unitId);
-  //     }),
-  //   );
-  //
-  //   const albums = await Promise.all(
-  //     favoriteAlbums.map(async (favoriteAlbum): Promise<AlbumEntity> => {
-  //       return this.albumService.getOneOrFail(favoriteAlbum.unitId);
-  //     }),
-  //   );
-  //
-  //   const tracks = await Promise.all(
-  //     favoriteTracks.map(async (favoriteTrack): Promise<TrackEntity> => {
-  //       return this.trackService.getOneOrFail(favoriteTrack.unitId);
-  //     }),
-  //   );
-  //
-  //   return <FavoritesResult>{
-  //     artists,
-  //     albums,
-  //     tracks,
-  //   };
-  // }
-  //
-  // async addArtist(id: string): Promise<ArtistEntity> {
-  //   const artist = await this.artistService.getOne(id);
-  //
-  //   if (artist === undefined) {
-  //     throw new HttpException(
-  //       `Artist with id=${id} does not exist`,
-  //       HttpStatus.UNPROCESSABLE_ENTITY,
-  //     );
-  //   }
-  //
-  //   await this.favoriteRepositoryService.save(id, FavoriteTypeEnum.ARTISTS);
-  //
-  //   return artist;
-  // }
-  //
-  // async addAlbum(id: string): Promise<AlbumEntity> {
-  //   const album = await this.albumService.getOneOrFail(id);
-  //
-  //   if (album === null) {
-  //     throw new HttpException(
-  //       `Album with id=${id} does not exist`,
-  //       HttpStatus.UNPROCESSABLE_ENTITY,
-  //     );
-  //   }
-  //
-  //   await this.favoriteRepositoryService.save(id, FavoriteTypeEnum.ALBUMS);
-  //
-  //   return album;
-  // }
-  //
-  // async addTrack(id: string): Promise<TrackEntity> {
-  //   const track = await this.trackService.getOne(id);
-  //
-  //   if (track === undefined) {
-  //     throw new HttpException(
-  //       `Track with id=${id} does not exist`,
-  //       HttpStatus.UNPROCESSABLE_ENTITY,
-  //     );
-  //   }
-  //
-  //   await this.favoriteRepositoryService.save(id, FavoriteTypeEnum.TRACKS);
-  //
-  //   return track;
-  // }
-  //
-  // async deleteArtist(id: string): Promise<void> {
-  //   const favoriteArtist =
-  //     await this.favoriteRepositoryService.getOneByUnitIdAndType(
-  //       id,
-  //       FavoriteTypeEnum.ARTISTS,
-  //     );
-  //
-  //   if (favoriteArtist === undefined) {
-  //     throw new HttpException(
-  //       `Artist with id=${id} does not in favorites`,
-  //       HttpStatus.NOT_FOUND,
-  //     );
-  //   }
-  //
-  //   await this.favoriteRepositoryService.delete(favoriteArtist.id);
-  // }
-  //
-  // async deleteAlbum(id: string): Promise<void> {
-  //   const favoriteAlbum =
-  //     await this.favoriteRepositoryService.getOneByUnitIdAndType(
-  //       id,
-  //       FavoriteTypeEnum.ALBUMS,
-  //     );
-  //
-  //   if (favoriteAlbum === undefined) {
-  //     throw new HttpException(
-  //       `Album with id=${id} does not in favorites`,
-  //       HttpStatus.NOT_FOUND,
-  //     );
-  //   }
-  //
-  //   await this.favoriteRepositoryService.delete(favoriteAlbum.id);
-  // }
-  //
-  // async deleteTrack(id: string): Promise<void> {
-  //   const favoriteTrack =
-  //     await this.favoriteRepositoryService.getOneByUnitIdAndType(
-  //       id,
-  //       FavoriteTypeEnum.TRACKS,
-  //     );
-  //
-  //   if (favoriteTrack === undefined) {
-  //     throw new HttpException(
-  //       `Track with id=${id} does not in favorites`,
-  //       HttpStatus.NOT_FOUND,
-  //     );
-  //   }
-  //
-  //   await this.favoriteRepositoryService.delete(favoriteTrack.id);
-  // }
+  async findMany(): Promise<FavoritesResult> {
+    const artists: ArtistEntity[] = [];
+    const albums: AlbumEntity[] = [];
+    const tracks: TrackEntity[] = [];
+
+    const favorites = await this.favoriteRepositoryService.find({
+      relations: {
+        artists: true,
+        albums: true,
+        tracks: true,
+      },
+    });
+
+    favorites.forEach((favoriteEntity: FavoriteEntity): void => {
+      artists.push(...favoriteEntity.artists);
+      albums.push(...favoriteEntity.albums);
+      tracks.push(...favoriteEntity.tracks);
+    });
+
+    return <FavoritesResult>{
+      artists,
+      albums,
+      tracks,
+    };
+  }
+
+  async addArtist(id: string): Promise<ArtistEntity> {
+    const artist = await this.artistRepositoryService.getOneById(id);
+
+    if (artist === null) {
+      throw new HttpException(
+        `Artist with id=${id} does not exist`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    const favorite = new FavoriteEntity({
+      type: FavoriteTypeEnum.ARTISTS,
+      artists: [artist],
+      albums: [],
+      tracks: [],
+    });
+
+    await this.favoriteRepositoryService.save(favorite);
+
+    return artist;
+  }
+
+  async addAlbum(id: string): Promise<AlbumEntity> {
+    const album = await this.albumRepositoryService.getOneById(id);
+
+    if (album === null) {
+      throw new HttpException(
+        `Album with id=${id} does not exist`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    const favorite = new FavoriteEntity({
+      type: FavoriteTypeEnum.ALBUMS,
+      artists: [],
+      albums: [album],
+      tracks: [],
+    });
+
+    await this.favoriteRepositoryService.save(favorite);
+
+    return album;
+  }
+
+  async addTrack(id: string): Promise<TrackEntity> {
+    const track = await this.trackRepositoryService.getOneById(id);
+
+    if (track === null) {
+      throw new HttpException(
+        `Track with id=${id} does not exist`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    const favorite = new FavoriteEntity({
+      type: FavoriteTypeEnum.TRACKS,
+      artists: [],
+      albums: [],
+      tracks: [track],
+    });
+
+    await this.favoriteRepositoryService.save(favorite);
+
+    return track;
+  }
+
+  async deleteArtist(id: string): Promise<void> {
+    const favoriteArtist =
+      await this.favoriteRepositoryService.getOneByArtistAndType({
+        artistId: id,
+        type: FavoriteTypeEnum.ARTISTS,
+      });
+
+    if (favoriteArtist === null) {
+      throw new HttpException(
+        `Artist with id=${id} does not in favorites`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    await this.favoriteRepositoryService.delete(favoriteArtist);
+  }
+
+  async deleteAlbum(id: string): Promise<void> {
+    const favoriteAlbum =
+      await this.favoriteRepositoryService.getOneByAlbumAndType({
+        albumId: id,
+        type: FavoriteTypeEnum.ALBUMS,
+      });
+
+    if (favoriteAlbum === null) {
+      throw new HttpException(
+        `Album with id=${id} does not in favorites`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    await this.favoriteRepositoryService.delete(favoriteAlbum);
+  }
+
+  async deleteTrack(id: string): Promise<void> {
+    const favoriteTrack =
+      await this.favoriteRepositoryService.getOneByTrackAndType({
+        trackId: id,
+        type: FavoriteTypeEnum.TRACKS,
+      });
+
+    if (favoriteTrack === null) {
+      throw new HttpException(
+        `Track with id=${id} does not in favorites`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    await this.favoriteRepositoryService.delete(favoriteTrack);
+  }
 }

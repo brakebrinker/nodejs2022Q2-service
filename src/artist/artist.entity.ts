@@ -1,6 +1,5 @@
 import { randomUUID } from 'crypto';
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
-import { AlbumEntity } from '../album/album.entity';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 type CreateArgs = {
   readonly name: string;
@@ -16,7 +15,7 @@ export class ArtistEntity {
   @Column()
   private name: string;
 
-  @Column({ type: Boolean})
+  @Column({ type: Boolean })
   private grammy: boolean;
 
   constructor(args: CreateArgs) {

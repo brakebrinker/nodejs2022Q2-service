@@ -8,5 +8,5 @@ export class CreateAlbumDto {
   @IsNumber()
   year: number;
 
-  artistId: string;
+  artistId: string | null;
 }

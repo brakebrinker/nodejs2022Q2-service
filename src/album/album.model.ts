@@ -1,10 +1,10 @@
 import { AlbumEntity } from './album.entity';
-import { ArtistModel } from '../artist/artist.model';
 
 type CreateArgs = {
   readonly id: string;
   readonly name: string;
   readonly year: number;
+  readonly artistId: string | null;
 };
 
 export class AlbumModel {
@@ -14,12 +14,13 @@ export class AlbumModel {
 
   readonly year: number;
 
-  readonly artist: ArtistModel | null;
+  readonly artistId: string | null;
 
-  private constructor({ id, name, year }: CreateArgs) {
+  private constructor({ id, name, year, artistId }: CreateArgs) {
     this.id = id;
     this.name = name;
     this.year = year;
+    this.artistId = artistId;
   }
 
   static createNewFromEntity(entity: AlbumEntity): AlbumModel {
@@ -27,6 +28,7 @@ export class AlbumModel {
       id: entity.id,
       name: entity.getName(),
       year: entity.getYear(),
+      artistId: entity.artistId,
     });
   }
 }
