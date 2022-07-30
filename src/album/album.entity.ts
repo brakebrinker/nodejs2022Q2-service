@@ -1,27 +1,40 @@
 import { randomUUID } from 'crypto';
+import { Column, Entity, ManyToOne, ObjectType, PrimaryColumn } from 'typeorm';
+import { ArtistEntity } from '../artist/artist.entity';
 
 type CreateArgs = {
   readonly name: string;
   readonly year: number;
-  readonly artistId: string | null;
+  readonly artist: ArtistEntity | null;
   readonly id?: string;
 };
 
+@Entity('album')
 export class AlbumEntity {
+  @PrimaryColumn('char', { length: 36 })
   readonly id: string;
 
+  @Column()
   private name: string;
 
+  @Column('int')
   private year: number;
 
-  private artistId: string | null;
+  @ManyToOne((): ObjectType<ArtistEntity> => ArtistEntity, {
+    nullable: true,
+  })
+  private artist:  Promise<ArtistEntity> | ArtistEntity | null;
 
   constructor(args: CreateArgs) {
-    const { name, year, artistId } = args;
+    if (arguments.length === 0) {
+      return;
+    }
+
+    const { name, year, artist } = args;
 
     this.name = name;
     this.year = year;
-    this.artistId = artistId;
+    this.artist = artist;
 
     this.id = randomUUID();
   }
@@ -34,12 +47,12 @@ export class AlbumEntity {
     this.year = year;
   }
 
-  getArtistId(): string | null {
-    return this.artistId;
+  getArtist(): Promise<ArtistEntity> | ArtistEntity | null {
+    return this.artist;
   }
 
-  setArtistId(artistId: string | null): void {
-    this.artistId = artistId;
+  setArtist(artist: ArtistEntity | null): void {
+    this.artist = artist;
   }
 
   getName(): string {

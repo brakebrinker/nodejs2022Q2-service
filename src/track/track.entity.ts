@@ -1,4 +1,6 @@
 import { randomUUID } from 'crypto';
+// import { Column, Entity, ManyToOne, ObjectType, PrimaryColumn } from 'typeorm';
+// import { ArtistEntity } from '../artist/artist.entity';
 
 type CreateArgs = {
   readonly name: string;
@@ -8,13 +10,21 @@ type CreateArgs = {
   readonly id?: string;
 };
 
+// @Entity('track')
 export class TrackEntity {
+  // @PrimaryColumn('char', { length: 36})
   readonly id: string;
 
+  // @Column()
   private name: string;
 
+  // @Column('int')
   private duration: number;
 
+  // @ManyToOne((): ObjectType<ArtistEntity> => ArtistEntity, {
+  //   nullable: true,
+  // })
+  // private artist:  Promise<ArtistEntity> | ArtistEntity | null;
   private artistId: string | null;
 
   private albumId: string | null;
