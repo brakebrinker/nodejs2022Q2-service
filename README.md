@@ -7,11 +7,23 @@
 docker-compose up
 ```
 
-2. To build docker
+2. To build docker and start
 ```
 docker-compose up --build
 ```
 
+### Docker Scan Vulnerability
+To scan Backend image
+
+```
+npm run dockerscan:backend
+```
+
+To scan DB image
+
+```
+npm run dockerscan:db
+```
 ### Troubleshooting 
 In case if you face this error
 ```
