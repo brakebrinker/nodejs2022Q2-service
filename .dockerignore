@@ -4,3 +4,4 @@
 /test-reports/
 /scripts/
 /.env.*
+/db-data
