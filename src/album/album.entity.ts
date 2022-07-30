@@ -1,5 +1,11 @@
 import { randomUUID } from 'crypto';
-import { Column, Entity, ManyToOne, ObjectType, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  ObjectType,
+  PrimaryColumn
+} from 'typeorm';
 import { ArtistEntity } from '../artist/artist.entity';
 
 type CreateArgs = {
@@ -22,8 +28,9 @@ export class AlbumEntity {
 
   @ManyToOne((): ObjectType<ArtistEntity> => ArtistEntity, {
     nullable: true,
+    lazy: true,
   })
-  private artist:  Promise<ArtistEntity> | ArtistEntity | null;
+  private artist: Promise<ArtistEntity> | ArtistEntity | null;
 
   constructor(args: CreateArgs) {
     if (arguments.length === 0) {

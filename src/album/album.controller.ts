@@ -29,9 +29,11 @@ export class AlbumController {
   async getAlbums(): Promise<AlbumModel[]> {
     const albums = await this.albumService.findMany();
 
-    return albums.map((album: AlbumEntity): AlbumModel => {
-      return AlbumModel.createNewFromEntity(album);
-    });
+    return Promise.all(albums.map(
+      async (album: AlbumEntity): Promise<AlbumModel> => {
+        return AlbumModel.createNewFromEntity(album);
+      }),
+    );
   }
 
   @UseInterceptors(ClassSerializerInterceptor)

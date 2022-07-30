@@ -19,6 +19,7 @@ export class AlbumService {
   ) {}
 
   async findMany(): Promise<AlbumEntity[]> {
+
     return this.albumRepositoryService.findAll();
   }
 

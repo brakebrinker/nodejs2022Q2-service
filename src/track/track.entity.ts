@@ -1,41 +1,50 @@
 import { randomUUID } from 'crypto';
-// import { Column, Entity, ManyToOne, ObjectType, PrimaryColumn } from 'typeorm';
-// import { ArtistEntity } from '../artist/artist.entity';
+import { Column, Entity, ManyToOne, ObjectType, PrimaryColumn } from 'typeorm';
+import { ArtistEntity } from '../artist/artist.entity';
+import { AlbumEntity } from '../album/album.entity';
 
 type CreateArgs = {
   readonly name: string;
   readonly duration: number;
-  readonly artistId: string | null;
-  readonly albumId: string | null;
+  readonly artist: ArtistEntity | null;
+  readonly album: AlbumEntity | null;
   readonly id?: string;
 };
 
-// @Entity('track')
+@Entity('track')
 export class TrackEntity {
-  // @PrimaryColumn('char', { length: 36})
+  @PrimaryColumn('char', { length: 36 })
   readonly id: string;
 
-  // @Column()
+  @Column()
   private name: string;
 
-  // @Column('int')
+  @Column('int')
   private duration: number;
 
-  // @ManyToOne((): ObjectType<ArtistEntity> => ArtistEntity, {
-  //   nullable: true,
-  // })
-  // private artist:  Promise<ArtistEntity> | ArtistEntity | null;
-  private artistId: string | null;
+  @ManyToOne((): ObjectType<ArtistEntity> => ArtistEntity, {
+    nullable: true,
+    lazy: true,
+  })
+  private artist: Promise<ArtistEntity> | ArtistEntity | null;
 
-  private albumId: string | null;
+  @ManyToOne((): ObjectType<AlbumEntity> => AlbumEntity, {
+    nullable: true,
+    lazy: true
+  })
+  private album: Promise<AlbumEntity> | AlbumEntity | null;
 
   constructor(args: CreateArgs) {
-    const { name, duration, artistId, albumId } = args;
+    if (arguments.length === 0) {
+      return;
+    }
+
+    const { name, duration, artist, album } = args;
 
     this.name = name;
     this.duration = duration;
-    this.artistId = artistId;
-    this.albumId = albumId;
+    this.artist = artist;
+    this.album = album;
 
     this.id = randomUUID();
   }
@@ -48,20 +57,20 @@ export class TrackEntity {
     this.duration = duration;
   }
 
-  getArtistId(): string | null {
-    return this.artistId;
+  getArtist(): Promise<ArtistEntity> | ArtistEntity | null {
+    return this.artist;
   }
 
-  setArtistId(artistId: string | null): void {
-    this.artistId = artistId;
+  setArtist(artist: ArtistEntity | null): void {
+    this.artist = artist;
   }
 
-  getAlbumId(): string | null {
-    return this.albumId;
+  getAlbum(): Promise<AlbumEntity> | AlbumEntity | null {
+    return this.album;
   }
 
-  setAlbumId(albumId: string | null): void {
-    this.albumId = albumId;
+  setAlbum(album: AlbumEntity | null): void {
+    this.album = album;
   }
 
   getName(): string {

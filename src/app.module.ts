@@ -15,7 +15,7 @@ import configService from '../ormconfig';
     UserModule,
     ArtistModule,
     AlbumModule,
-    // TrackModule,
+    TrackModule,
     // FavoriteModule,
   ],
   controllers: [AppController],

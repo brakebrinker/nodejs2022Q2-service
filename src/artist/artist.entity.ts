@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto';
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { AlbumEntity } from '../album/album.entity';
 
 type CreateArgs = {
   readonly name: string;

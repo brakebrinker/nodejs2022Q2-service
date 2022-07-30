@@ -16,8 +16,8 @@ import { ArtistEntity } from '../artist/artist.entity';
     AlbumService,
     AlbumRepositoryService,
     ArtistRepositoryService,
-    TrackRepositoryService,
-    FavoriteRepositoryService,
+    // TrackRepositoryService,
+    // FavoriteRepositoryService,
   ],
 })
 export class AlbumModule {}
