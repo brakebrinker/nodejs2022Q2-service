@@ -12,4 +12,12 @@ export class UserRepositoryService extends AbstractRepositoryService<UserEntity>
   ) {
     super(repository);
   }
+
+  async findOneByLogin(login: string): Promise<UserEntity> {
+    return this.repository
+      .createQueryBuilder('user')
+      .andWhere('user.login = :login', { login })
+      .limit(1)
+      .getOne();
+  }
 }

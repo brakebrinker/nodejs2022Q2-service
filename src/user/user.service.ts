@@ -1,12 +1,21 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable
+} from '@nestjs/common';
 import { UserEntity } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { UserRepositoryService } from './user.repository.service';
+import { genSalt, hash } from 'bcrypt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepositoryService: UserRepositoryService) {}
+  constructor(
+    private readonly userRepositoryService: UserRepositoryService,
+    private readonly configService: ConfigService,
+  ) {}
 
   async findMany(): Promise<UserEntity[]> {
     return this.userRepositoryService.findAll();
@@ -23,13 +32,11 @@ export class UserService {
   }
 
   async create(dto: CreateUserDto): Promise<UserEntity> {
-    if (dto.login === undefined || dto.password === undefined) {
-      throw new HttpException('Parameter is required', HttpStatus.BAD_REQUEST);
-    }
+    const salt = await genSalt(parseInt(this.configService.get('CRYPT_SALT')));
 
     const user = new UserEntity({
       login: dto.login,
-      password: dto.password,
+      password: await hash(dto.password, salt),
       version: 1,
     });
 

@@ -7,6 +7,7 @@ import { AlbumModule } from './album/album.module';
 import { TrackModule } from './track/track.module';
 import { FavoriteModule } from './favorite/favorite.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
 import configService from '../ormconfig';
 
 @Module({
@@ -17,6 +18,7 @@ import configService from '../ormconfig';
     AlbumModule,
     TrackModule,
     FavoriteModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
