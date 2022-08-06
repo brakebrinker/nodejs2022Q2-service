@@ -10,6 +10,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from '../user/user.entity';
 import { UserService } from '../user/user.service';
 import { ConfigService } from '@nestjs/config';
+import { JwtAccessStrategy } from './strategies/jwt-access.strategy';
+import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 
 @Module({
   imports: [
@@ -23,7 +25,7 @@ import { ConfigService } from '@nestjs/config';
       signOptions: { expiresIn: jwtConstants.expiresIn },
     }),
   ],
-  providers: [AuthService, UserRepositoryService, UserService, ConfigService],
+  providers: [AuthService, UserRepositoryService, UserService, ConfigService, JwtAccessStrategy, JwtRefreshStrategy],
   exports: [AuthService],
   controllers: [AuthController],
 })

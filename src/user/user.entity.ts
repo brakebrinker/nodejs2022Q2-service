@@ -5,6 +5,7 @@ type CreateArgs = {
   readonly login: string;
   readonly password: string;
   readonly version: number;
+  readonly refreshToken: string | null;
   readonly id?: string;
   readonly createdAt?: number;
   readonly updatedAt?: number;
@@ -24,6 +25,9 @@ export class UserEntity {
   @Column()
   private version: number;
 
+  @Column({ nullable: true })
+  private refreshToken: string | null;
+
   @Column('int8')
   private readonly createdAt: number;
 
@@ -35,11 +39,12 @@ export class UserEntity {
       return;
     }
 
-    const { login, password, version, createdAt = new Date() } = args;
+    const { login, password, version, refreshToken, createdAt = new Date() } = args;
 
     this.login = login;
     this.password = password;
     this.version = version;
+    this.refreshToken = refreshToken;
 
     this.id = randomUUID();
     this.createdAt = new Date(createdAt).getTime();
@@ -62,12 +67,20 @@ export class UserEntity {
     return this.password;
   }
 
+  getRefreshToken(): string | null {
+    return this.refreshToken;
+  }
+
   setUpdatedAt(updatedAt: number): void {
     this.updatedAt = updatedAt;
   }
 
   setPassword(password: string): void {
     this.password = password;
+  }
+
+  setRefreshToken(refreshToken: string | null): void {
+    this.refreshToken = refreshToken;
   }
 
   updateVersion(): void {

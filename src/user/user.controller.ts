@@ -9,7 +9,7 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
-  Put,
+  Put, UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
@@ -19,11 +19,13 @@ import { UserService } from './user.service';
 import { UserEntity } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('')
   async getUsers(): Promise<UserModel[]> {

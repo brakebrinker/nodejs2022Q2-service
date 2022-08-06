@@ -38,6 +38,7 @@ export class UserService {
       login: dto.login,
       password: await hash(dto.password, salt),
       version: 1,
+      refreshToken: dto.refreshToken === undefined ? null : dto.refreshToken,
     });
 
     return this.userRepositoryService.save(user);
@@ -62,6 +63,14 @@ export class UserService {
     user.updateVersion();
 
     return this.userRepositoryService.save(user);
+  }
+
+  async updateRefreshToken(id: string, refreshToken: string | null): Promise<void> {
+    const user = await this.getOneOrFail(id);
+
+    user.setRefreshToken(refreshToken);
+
+    await this.userRepositoryService.save(user);
   }
 
   async delete(id: string): Promise<UserEntity> {

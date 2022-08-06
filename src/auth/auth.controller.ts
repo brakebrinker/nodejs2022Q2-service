@@ -2,33 +2,35 @@ import {
   Body,
   Controller,
   Post,
-  Request,
-  UseGuards, UsePipes,
+  UsePipes,
   ValidationPipe
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { AuthService, TokensResult } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
-import { UserService } from '../user/user.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
+import { AuthRefreshDto } from './dto/auth-refresh.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
-    private userService: UserService,
   ) {}
 
   @UsePipes(new ValidationPipe())
   @Post('login')
-  async login(@Body() dto: AuthDto) {
-    const user = await this.authService.validateUser(dto);
-
-    return this.authService.login(user);
+  async login(@Body() dto: AuthDto): Promise<TokensResult> {
+    return this.authService.signIn(dto);
   }
 
   @UsePipes(new ValidationPipe())
   @Post('signup')
-  async signup (@Body() dto: CreateUserDto) {
-    await this.userService.create(dto);
+  async signup (@Body() dto: CreateUserDto): Promise<TokensResult> {
+    return  this.authService.signUp(dto);
+  }
+
+  @UsePipes(new ValidationPipe())
+  @Post('refresh')
+  async refresh (@Body() dto: AuthRefreshDto): Promise<TokensResult> {
+    return this.authService.refresh(dto);
   }
 }
