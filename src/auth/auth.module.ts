@@ -15,9 +15,7 @@ import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      UserEntity,
-    ]),
+    TypeOrmModule.forFeature([UserEntity]),
     UserModule,
     PassportModule,
     JwtModule.register({
@@ -25,7 +23,14 @@ import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
       signOptions: { expiresIn: jwtConstants.expiresIn },
     }),
   ],
-  providers: [AuthService, UserRepositoryService, UserService, ConfigService, JwtAccessStrategy, JwtRefreshStrategy],
+  providers: [
+    AuthService,
+    UserRepositoryService,
+    UserService,
+    ConfigService,
+    JwtAccessStrategy,
+    JwtRefreshStrategy,
+  ],
   exports: [AuthService],
   controllers: [AuthController],
 })

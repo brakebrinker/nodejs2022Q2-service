@@ -21,7 +21,9 @@ export class UserRepositoryService extends AbstractRepositoryService<UserEntity>
       .getOne();
   }
 
-  async findOneByRefreshToken(refreshToken: string): Promise<UserEntity | null> {
+  async findOneByRefreshToken(
+    refreshToken: string,
+  ): Promise<UserEntity | null> {
     return this.repository
       .createQueryBuilder('user')
       .andWhere('user.refreshToken = :refreshToken', { refreshToken })

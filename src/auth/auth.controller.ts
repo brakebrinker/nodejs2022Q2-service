@@ -3,7 +3,7 @@ import {
   Controller,
   Post,
   UsePipes,
-  ValidationPipe
+  ValidationPipe,
 } from '@nestjs/common';
 import { AuthService, TokensResult } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
@@ -13,9 +13,7 @@ import { Public } from './decorators/auth-access.decorator';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-  ) {}
+  constructor(private authService: AuthService) {}
 
   @Public()
   @UsePipes(new ValidationPipe())
@@ -27,14 +25,14 @@ export class AuthController {
   @Public()
   @UsePipes(new ValidationPipe())
   @Post('signup')
-  async signup (@Body() dto: CreateUserDto): Promise<TokensResult> {
-    return  this.authService.signUp(dto);
+  async signup(@Body() dto: CreateUserDto): Promise<TokensResult> {
+    return this.authService.signUp(dto);
   }
 
   @Public()
   @UsePipes(new ValidationPipe())
   @Post('refresh')
-  async refresh (@Body() dto: AuthRefreshDto): Promise<TokensResult> {
+  async refresh(@Body() dto: AuthRefreshDto): Promise<TokensResult> {
     return this.authService.refresh(dto);
   }
 }

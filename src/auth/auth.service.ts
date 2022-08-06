@@ -1,7 +1,4 @@
-import {
-  ForbiddenException,
-  Injectable,
-} from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserRepositoryService } from '../user/user.repository.service';
 import { compare } from 'bcrypt';
@@ -19,7 +16,7 @@ export type JwtPayload = {
 export type TokensResult = {
   readonly accessToken: string;
   readonly refreshToken: string;
-}
+};
 
 @Injectable()
 export class AuthService {
@@ -37,7 +34,7 @@ export class AuthService {
       throw new ForbiddenException('User not found');
     }
 
-    const isCorrectPassword = await compare(dto.password,  user.getPassword());
+    const isCorrectPassword = await compare(dto.password, user.getPassword());
     if (!isCorrectPassword) {
       throw new ForbiddenException('Wrong user password');
     }
@@ -68,7 +65,9 @@ export class AuthService {
       throw new ForbiddenException('Refresh token is expired');
     }
 
-    const user = await this.userRepositoryService.findOneByRefreshToken(dto.refreshToken);
+    const user = await this.userRepositoryService.findOneByRefreshToken(
+      dto.refreshToken,
+    );
 
     if (user === null) {
       throw new ForbiddenException('User not found');
@@ -81,7 +80,10 @@ export class AuthService {
     return tokens;
   }
 
-  private async getTokens(userId: string, login: string): Promise<TokensResult> {
+  private async getTokens(
+    userId: string,
+    login: string,
+  ): Promise<TokensResult> {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.sign(
         {
@@ -100,7 +102,9 @@ export class AuthService {
         },
         {
           secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
-          expiresIn: this.configService.get<string>('TOKEN_REFRESH_EXPIRE_TIME'),
+          expiresIn: this.configService.get<string>(
+            'TOKEN_REFRESH_EXPIRE_TIME',
+          ),
         },
       ),
     ]);

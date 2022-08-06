@@ -9,7 +9,7 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
-  Put, UseGuards,
+  Put,
   UseInterceptors,
   UsePipes,
   ValidationPipe,

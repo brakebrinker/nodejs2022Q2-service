@@ -1,13 +1,9 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserEntity } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { UserRepositoryService } from './user.repository.service';
-import { genSalt, hash } from 'bcrypt';
+import { compare, genSalt, hash } from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -54,18 +50,28 @@ export class UserService {
 
     const user = await this.getOneOrFail(id);
 
-    if (user.getPassword() !== dto.oldPassword) {
+    const salt = await genSalt(parseInt(this.configService.get('CRYPT_SALT')));
+
+    const isCorrectPassword = await compare(
+      dto.oldPassword,
+      user.getPassword(),
+    );
+
+    if (!isCorrectPassword) {
       throw new HttpException('Old password is wrong', HttpStatus.FORBIDDEN);
     }
 
-    user.setPassword(dto.newPassword);
+    user.setPassword(await hash(dto.newPassword, salt));
     user.setUpdatedAt(new Date().getTime());
     user.updateVersion();
 
     return this.userRepositoryService.save(user);
   }
 
-  async updateRefreshToken(id: string, refreshToken: string | null): Promise<void> {
+  async updateRefreshToken(
+    id: string,
+    refreshToken: string | null,
+  ): Promise<void> {
     const user = await this.getOneOrFail(id);
 
     user.setRefreshToken(refreshToken);

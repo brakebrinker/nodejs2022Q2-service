@@ -39,7 +39,13 @@ export class UserEntity {
       return;
     }
 
-    const { login, password, version, refreshToken, createdAt = new Date() } = args;
+    const {
+      login,
+      password,
+      version,
+      refreshToken,
+      createdAt = new Date(),
+    } = args;
 
     this.login = login;
     this.password = password;
